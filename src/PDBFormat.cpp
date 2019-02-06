@@ -162,7 +162,7 @@ PDBFormat::BioUData PDBFormat::parseBioULine(const string &_pdbBioULine){
 	return bio;
 }
 
-PDBFormat::AtomData PDBFormat::parseAtomLine(const string &_pdbAtomLine){
+PDBFormat::AtomData PDBFormat::parseAtomLine(const string &_pdbAtomLine, bool _allowPartialRead){
 	AtomData atom;
 
 	int lineLength = _pdbAtomLine.size();
@@ -231,9 +231,12 @@ PDBFormat::AtomData PDBFormat::parseAtomLine(const string &_pdbAtomLine){
 
 
 	} catch(exception &e){
-
-	        cerr << "ERROR 34918 PDBFormat parseAtomLine "<<e.what()<<" line is: "<<_pdbAtomLine<<endl;
-		exit(34918);
+	        if (_allowPartialRead){
+		  return atom;
+		} else {
+		  cerr << "ERROR 34918 PDBFormat parseAtomLine "<<e.what()<<" line is: "<<_pdbAtomLine<<endl;
+		  exit(34918);
+		}
 
 	}
 

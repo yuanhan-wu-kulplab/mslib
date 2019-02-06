@@ -597,7 +597,7 @@ class PDBFormat {
 		static ScaleData parseScaleLine(const std::string &_scaleLine);
 		static SymData  parseSymLine(const std::string &_symLine);
 		static BioUData parseBioULine(const std::string &_bioULine);
-		static AtomData parseAtomLine(const std::string &_pdbAtomLine);
+		static AtomData parseAtomLine(const std::string &_pdbAtomLine, bool _allowPartialRead=false);
 		static ModelData parseModelLine(const std::string &_pdbModelLine);
 		static AtomData createAtomData(const Atom &_at);
 		static AtomData createAtomData(std::string _resName, Real &_x, Real &_y, Real &_z, std::string _element);
