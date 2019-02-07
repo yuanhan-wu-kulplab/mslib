@@ -16,7 +16,7 @@ Library (MSL)" (2012) J. Comput. Chem, 33, 1645-61
 DOI: 10.1002/jcc.22968
 
                            MSL Developers: 
-University of Wisconsin-Madison       Scripps Research Institute
+University of Wisconsin-Madison       The Wistar Institute
    Alessandro Senes                      Daniel W Kulp
    Sabareesh Subramaniam
    Benjamnin K Mueller

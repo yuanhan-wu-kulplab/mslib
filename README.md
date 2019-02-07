@@ -57,7 +57,7 @@ The source code can be downloaded on SourceForge.  Go to the **[Download](http:/
 
 *   Alessandro Senes, Sabareesh Subraminiam, Ben Mueller, Dept. of Biochemistry, U. of Wisconsin-Madison, [**Senes Lab**](http://senes.biochem.wisc.edu)
 
-*   Dan Kulp, IAVI, Scripps Research Institute, La Jolla CA
+*   Daniel W. Kulp, Ph.D. , The Wistar Institute, Philadelphia,PA [**Kulp Lab**](https://wistar.org/our-scientists/daniel-kulp)
 
 *   Jason Donald, Manus Biosynthesis, Cambridge MA
 
