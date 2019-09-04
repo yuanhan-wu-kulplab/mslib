@@ -32,6 +32,7 @@ You should have received a copy of the GNU Lesser General Public
 #include "AtomContainer.h"
 #include "MslTools.h"
 #include "Transforms.h"
+#include "MslOut.h"
 
 using namespace std;
 using namespace MSL;
@@ -41,8 +42,14 @@ using namespace MSL;
  *  AtomContainer
  *******************************************************************/
 
+
+static MslOut MSLOUT("main");
+
 int main(int argc, char *argv[]) {
 
+
+        MSLOUT.turnAllOn();
+  
 	// the program requires the location of the "exampleFiles" as an argument
 	if (argc < 2) {
 		cerr << "USAGE:\nexample_read_write_PDBs_with_the_AtomContainer <path_of_exampleFiles_directory>" << endl;
@@ -125,5 +132,27 @@ int main(int argc, char *argv[]) {
 		cout << "OK" << endl;
 	}
 
+
+	string file2 = "example0010.cif";
+	file2 = (string)argv[1] + "/" + file2;
+	cout << "Create an AtomContainer and read the atoms from " << file2 << endl;
+
+	AtomContainer container2;
+	if (!container2.readCif(file2)) {
+		// error checking, the PDB could not be read
+		cerr << endl;
+		cerr << "File " << file2 << " cannot be found, please speficy the path of the \"exampleFiles\" directory as an argument" << endl;
+		exit(1);
+	} else {
+		cout << "OK" << endl;
+	}
+	cout << endl;
+
+	// all atoms can be conveniently be printed using the << operator
+	cout << "Print the AtomContainer" << endl;
+	cout << container2 << endl;
+	cout << endl;
+	cout << "=============================" << endl;	
+	
 	return 0;
 }

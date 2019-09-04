@@ -39,6 +39,8 @@ You should have received a copy of the GNU Lesser General Public
 #include "IcTable.h"
 #include "PDBReader.h"
 #include "PDBWriter.h"
+#include "CIFReader.h"
+#include "CIFWriter.h"
 #include "EnergySet.h"
 #include "PDBTopology.h"
 #include "VectorPair.h"
@@ -237,6 +239,10 @@ class System {
 		bool writePdb(std::string _filename, std::string _remark);
 		bool writeMultiplePdbs(std::string _filename_prefix,double _rmsd=-1.0);
 
+		bool readCif(std::string _filename, bool _keepOrder=false); // add atoms or alt coor
+		bool writeCif(std::string _filename);
+		
+		
 		unsigned int assignCoordinates(const AtomPointerVector & _atoms,bool checkIdentity=true); // only set coordinates for existing matching atoms, return the number assigned
 		unsigned int assignCoordinates(const AtomPointerVector & _atoms, std::map<std::string,std::string> *_convert_names, bool checkIdentity=true);
 
@@ -645,6 +651,27 @@ inline void System::purgeIcTable() {
 inline bool System::readPdb(std::string _filename, bool _keepOrder) {reset(); if (!pdbReader->open(_filename) || !pdbReader->read()) return false; addAtoms(pdbReader->getAtomPointers(), _keepOrder); numberOfModels = pdbReader->getNumberOfModels(); return true;}
 inline bool System::writePdb(std::string _filename, std::string _remark) {pdbWriter->clearRemarks(); pdbWriter->addRemark(_remark);return writePdb(_filename);}
 
+inline bool System::readCif(std::string _filename, bool _keepOrder) {
+  reset();
+  CIFReader *cifReader = new CIFReader();
+  if (!cifReader->open(_filename) || !cifReader->read()) return false;
+  addAtoms(cifReader->getAtomPointers(), _keepOrder);
+  numberOfModels = 1;
+  return true;
+}
+
+inline bool System::writeCif(std::string _filename){
+  CIFWriter *cifWriter = new CIFWriter();
+  if (!cifWriter->open(_filename)) return false;
+
+  bool result = cifWriter->write(activeAtoms);
+  
+  cifWriter->close();
+  
+  return result;
+}
+ 
+ 
 inline unsigned int System::getPositionIndex(std::string _chain, int _resNum, std::string _icode) {
 	if (positionExists(_chain, _resNum, _icode)) {
 		return getPositionIndex(&getLastFoundPosition());

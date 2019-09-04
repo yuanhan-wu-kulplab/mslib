@@ -36,6 +36,9 @@ You should have received a copy of the GNU Lesser General Public
 #include "PDBReader.h"
 #include "PDBWriter.h"
 
+#include "CIFReader.h"
+#include "CIFWriter.h"
+
 
 namespace MSL { 
 class Residue;
@@ -102,6 +105,8 @@ class AtomContainer {
                 bool readPdb(std::stringstream& _filename);
 		bool writePdb(std::string _filename);
 
+		bool readCif(std::string _filename);
+		bool writeCif(std::string _filename);
 		// print the atom container using the AtomPointerVector toString
 		std::string toString() const;
 		friend std::ostream & operator<<(std::ostream &_os, const AtomContainer & _atomContainer)  {_os << _atomContainer.toString(); return _os;};
@@ -168,7 +173,10 @@ class AtomContainer {
 
 		PDBReader * pdbReader;
 		PDBWriter * pdbWriter;
-
+		
+		CIFReader * cifReader;
+		CIFWriter * cifWriter;
+		
 		bool addAtomsAsAltCoors_flag;
 		
 };
@@ -207,6 +215,19 @@ inline bool AtomContainer::readPdb(std::string _filename) {
 }
 inline bool AtomContainer::readPdb(std::stringstream& _str) { deletePointers(); setup(_str); if (!pdbReader->open(_str) || !pdbReader->read()) return false; addAtoms(pdbReader->getAtomPointers()); return true; }
 inline bool AtomContainer::writePdb(std::string _filename) {if (!pdbWriter->open(_filename)) return false; bool result = pdbWriter->write(atoms); pdbWriter->close();return result;}
+
+inline bool AtomContainer::readCif(std::string _filename) {
+        reset();
+	if (cifReader->open(_filename)){
+	  if (cifReader->read()){
+	    addAtoms(cifReader->getAtomPointers());
+	    return true;
+	  } 
+	}
+	return false;
+}
+inline bool AtomContainer::writeCif(std::string _filename) {if (!cifWriter->open(_filename)) return false; bool result = cifWriter->write(atoms); cifWriter->close();return result;}
+ 
 inline std::string AtomContainer::toString() const {return atoms.toString();}
 inline void AtomContainer::saveCoor(std::string _coordName) {atoms.saveCoor(_coordName);}
 inline void AtomContainer::saveAltCoor(std::string _coordName) {atoms.saveAltCoor(_coordName);}

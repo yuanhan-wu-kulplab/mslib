@@ -49,6 +49,8 @@ AtomContainer::AtomContainer(const AtomContainer & _AC) {
 	addAtomsAsAltCoors_flag = false;
 	pdbReader = NULL;
 	pdbWriter = NULL;
+	cifReader = NULL;
+	cifReader = NULL;
 	copy(_AC);
 }
 
@@ -64,12 +66,16 @@ void AtomContainer::operator=(const AtomContainer & _AC) {
 void AtomContainer::setup() {
 	pdbReader = new PDBReader;
 	pdbWriter = new PDBWriter;
+	cifReader = new CIFReader;
+	cifWriter = new CIFWriter;
 	found = atomMap.end();
 }
 
 void AtomContainer::setup(std::stringstream& _str) {
         pdbReader = new PDBReader(_str);
         pdbWriter = new PDBWriter;
+	cifReader = new CIFReader;
+	cifWriter = new CIFWriter;
         found = atomMap.end();
 }
 
@@ -95,6 +101,10 @@ void AtomContainer::deletePointers() {
 	if (pdbReader != NULL) delete pdbReader;
 	if (pdbWriter != NULL) delete pdbWriter;
         pdbReader = NULL; pdbWriter = NULL;
+
+	if (cifReader != NULL) delete cifReader;
+	if (cifWriter != NULL) delete cifWriter;
+        cifReader = NULL; cifWriter = NULL;
 }
 
 void AtomContainer::addAtom(const Atom & _atom) {

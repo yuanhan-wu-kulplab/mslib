@@ -125,5 +125,48 @@ int main(int argc, char *argv[]) {
 		cout << "OK" << endl;
 	}
 
+
+
+	// read an example CIF file
+	string file2 = "example0010.cif";
+	file2 = (string)argv[1] + "/" + file2;
+	cout << "Create an System and read the atoms from " << file2 << endl;
+
+	System cifSys;
+	if (!cifSys.readCif(file2)){
+	  cerr << endl;
+	  cerr << "File " << file2 << " cannot be found or other error reading file\n";
+	  exit(1);
+	} else {
+	  cout << "Read CIF File OK\n";
+	}
+	cout <<endl;
+
+	// the sequence can be conveniently be printed using the << operator
+	cout << "Print the System (will print the sequence)" << endl;
+	cout << cifSys << endl;
+	cout << endl;
+	cout << "=============================" << endl;
+	
+	cout << "Cycle over the atoms of the System" << endl;
+	for (unsigned int i=0; i<cifSys.atomSize(); i++) {
+		cout << "Atom " << i << " is " << cifSys[i] << endl;
+	}
+	cout << endl;
+
+
+	// Write new cif 
+	cout << "Write the coordinates to file: /tmp/example0010_out.cif" << endl;
+	cifSys.writeCif("/tmp/example0010_out.cif");
+
+	// Write new pdb
+	cifSys.writePdb("/tmp/example0010_out.pdb");
+
+
+	// Now read in from PDB and write out to CIF
+	System pdbSys;
+	pdbSys.readPdb(file);
+	pdbSys.writeCif("/tmp/example0001_out.cif");
+
 	return 0;
 }
