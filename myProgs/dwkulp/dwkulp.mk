@@ -12,7 +12,7 @@ MYPROGS   = discoverMotif generateRotamerLibrary getTripletCaMeasurements superR
 	    getConditionalPhiPsi refinePotentialFusions refinePotentialFusions_single createTertFragDB buildRotamers getLoopLengths resurfaceSaltBridges findMotifMSA \
 	    fitCoiledCoil addResiduesMinClash querySeqConsMulti alignList cluster getDistanceToHelixAxis calcSasa structureSelectedMSA transplantResidues \
 	    analyzeSurfacePositionsMSA findDisulfides findTermini measureDisulfides multiHelixMatch analyzeRosettaModels getGlycanDihedrals alignByFrame alignVirus getRosettaScores aaScan \
-            makeChimeraMSA genIdealHelix fuseHelix getAnglesPDBFrags reportGlycanData getSphericalBounds simpleNanoparticleModeling
+            makeChimeraMSA genIdealHelix fuseHelix getAnglesPDBFrags reportGlycanData getSphericalBounds simpleNanoparticleModeling convertPDBtoCIF getGlycanDihedrals betaDecider
 #calcSasaInterface
 
 MYHEADERS = 
