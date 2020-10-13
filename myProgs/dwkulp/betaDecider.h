@@ -33,3 +33,4 @@ struct Options {
 // Helper function to clean up main.
 Options setupOptions(int theArgc, char * theArgv[]);
 bool checkBetaSheet(System &_sys, int _pos);
+bool neighboringStrand(System &_sys, pair<int,int> &_s1, pair<int,int> &_s2);
