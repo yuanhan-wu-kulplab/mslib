@@ -216,10 +216,17 @@ string PyMolVisualization::toString() {
 }
 
 bool PyMolVisualization::createSelection(string &_selName, string &_sel){
+  string color="";
+  return (createSelection(_selName, _sel, color));
+}
+bool PyMolVisualization::createSelection(string &_selName, string &_sel, string &_color){
 
   stringstream ss;
   ss << "cmd.do(\"select "<<_selName<<","<<_sel<<"\")"<<endl;
-  ss << "cmd.do(\"show sticks, "<<_selName<<"\")"<<endl;
+  //ss << "cmd.do(\"show sticks, "<<_selName<<"\")"<<endl;
+  if (_color != ""){
+    ss << "cmd.do(\"color "<<_color<<", "<<_selName<<"\")"<<endl;
+  }
   pymolSelectionStrings[_selName] = ss.str();
   return true;
 }
