@@ -22,7 +22,7 @@ using namespace std;
 using namespace MSL;
 
 
-// MslOut 
+// MslOut for nice output
 static MslOut MSLOUT("betaDecider");
 static SysEnv SYSENV;
 
@@ -36,35 +36,52 @@ int main(int argc, char *argv[]) {
   System sys;
   sys.readPdb(opt.pdb);
 
+  // Count the number of strand residues
   int strandCount = 0;
+
+  // Store list of the position for start, end of each strand
   vector< pair<int,int> > strands;
+
+  // Loop over all positions
   for (uint i = 0; i < sys.positionSize();i++){
 
+    // Check if this position is in a beta sheet
     if (checkBetaSheet(sys,i)){
       cout << " SHEET: "<<sys.getPosition(i).getPositionId()<<endl;
+
+      // Increment Strand Count
       strandCount++;
+
+
     } else {
+
+      // This residue is not a strand, so could be end of strand
 
       // Add ending strand to list of strands if more than 4 residues in a row were beta
       if (strandCount > 4){
 	strands.push_back(pair<int,int>(i-strandCount,i));
       }
 
+      // Reset strand count
       strandCount = 0;
     }
 
   }
 
-  
+
+
+  // Output strand defintions to screen and make a PyMOL script containing selections for each strand
   PyMolVisualization pymol;
 
   cout << "Number of strands detected: "<<strands.size()<<endl;
 
   // Print out each strand
   for (uint i = 0; i < strands.size();i++){
+
+    // Give strand a name
     string strandName = MslTools::stringf("Strand-%03d",i+1);
 
-
+    // Print out strand defition
     cout << strandName <<" is between "<<sys.getPosition(strands[i].first).getPositionId()<< " and "<<sys.getPosition(strands[i].second).getPositionId()<<endl;
 
     // Save for pymol
@@ -75,13 +92,19 @@ int main(int argc, char *argv[]) {
     pymol.createSelection(strandName,strandSelStr, strandColor);
   }
 
+
+  // Write out PyMOL Script in PyMol use "run PDB-STRANDS.py"
   ofstream fout;
   fout.open(MslTools::stringf("%s-STRANDS.py", MslTools::getFileName(opt.pdb).c_str()));
   fout << pymol;
   fout.close();
 
+
 }
 
+
+
+// Function to help setup input options
 Options setupOptions(int theArgc, char * theArgv[]){
   Options opt;
 
