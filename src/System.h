@@ -241,7 +241,9 @@ class System {
 
 		bool readCif(std::string _filename, bool _keepOrder=false); // add atoms or alt coor
 		bool writeCif(std::string _filename);
-		
+
+		// Will read either pdb or cif file
+		bool readStructureFile(std::string _filename);		
 		
 		unsigned int assignCoordinates(const AtomPointerVector & _atoms,bool checkIdentity=true); // only set coordinates for existing matching atoms, return the number assigned
 		unsigned int assignCoordinates(const AtomPointerVector & _atoms, std::map<std::string,std::string> *_convert_names, bool checkIdentity=true);
@@ -276,6 +278,9 @@ class System {
 		//  Multiple links at the same time, takes a vector of vector of position IDs 
 		void setLinkedPositions(std::vector<std::vector<std::string> > &_linkedPositions); 
 
+		// Return index of positions within this System that are connected to _pos.
+		std::vector<int> getConnectedPositions(Position &_pos);
+		
 
 		std::string toString() const;
 		std::string getSizes() const;
@@ -671,6 +676,20 @@ inline bool System::writeCif(std::string _filename){
   return result;
 }
  
+inline bool System::readStructureFile(std::string _filename){
+
+  string ext = MslTools::pathExtension(_filename);
+  if (ext == "pdb") {
+    return readPdb(_filename);
+  }
+
+  if (ext == "cif") {
+    return readCif(_filename);
+  }
+
+  return false;
+}
+
  
 inline unsigned int System::getPositionIndex(std::string _chain, int _resNum, std::string _icode) {
 	if (positionExists(_chain, _resNum, _icode)) {

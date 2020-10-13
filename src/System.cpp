@@ -78,6 +78,9 @@ void System::setup() {
 void System::copy(const System & _system) {
 	/**************************************************************
 	 *  TODO:  add copy of bonds
+	 *  NOTE: still points to Position objects from previous system
+	 *  this non-obvious bug was found 7 years after I noticed strange 
+         *  strange behavior. 
 	 **************************************************************/
 	reset();
 	cerr << "System::copy() doesnt handle copying the EnergySet" << endl;
@@ -831,3 +834,31 @@ bool System::writePdb(std::string _filename, bool _writeAllModels) {
 }
 
 
+// Return index of positions within this System that are connected to _pos.
+std::vector<int> System::getConnectedPositions(Position &_pos){
+
+  std::vector<int> result;
+  set<Atom*> excluded;
+  for (uint a = 0; a < _pos.getAtomPointers().size();a++){
+      excluded.insert(_pos.getAtomPointers()[a]);
+  }  
+
+  for (uint i = 0; i < _pos.getAtomPointers().size();i++){
+
+    std::vector<Atom *> connectedAtoms = _pos.getAtom(i).getBonds();
+    //cout << "Atom "<<_pos.getAtom(i).toString()<< " has "<<connectedAtoms.size()<< " connectedAtoms"<<endl;
+    for (std::vector<Atom *>::iterator k =connectedAtoms.begin();k != connectedAtoms.end();k++){
+
+      // Skip excluded atoms
+      if (excluded.find((*k)) != excluded.end()){
+	continue;
+      }
+
+      result.push_back(getPositionIndex((*k)->getPositionId()));
+    }
+
+  }
+
+
+  return result;
+}
