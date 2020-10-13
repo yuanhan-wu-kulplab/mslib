@@ -128,10 +128,9 @@ Atom * CIFFormat::createAtomFromAtomSiteLine(const string &_pdbAtomLine, vector<
 }
 
 
-string CIFFormat::createLoopAtomSite(AtomPointerVector &_ats, vector<string> &_fields){
+string CIFFormat::createLoopAtomSite(AtomPointerVector &_ats, vector<string> &_fields, bool _addHeader, bool _addTail){
 
   std::stringstream a;
-  a << "loop_\n";
 
   if (_fields.size() == 0){
     _fields.push_back("_atom_site.group_PDB");
@@ -148,16 +147,20 @@ string CIFFormat::createLoopAtomSite(AtomPointerVector &_ats, vector<string> &_f
     _fields.push_back("_atom_site.occupancy");
     _fields.push_back("_atom_site.B_iso_or_equiv"); 
   }
-
-  for (uint i = 0; i < _fields.size();i++){
-    a << _fields[i] << "\n";
+  if (_addHeader){
+    a << "loop_\n";
+    for (uint i = 0; i < _fields.size();i++){
+      a << _fields[i] << "\n";
+    }
   }
   
   for (uint i = 0; i < _ats.size();i++){
     a << createAtomSiteLineFromAtom(_ats(i), _fields,i);
   }
 
-  a << "#\n";
+  if (_addTail){
+    a << "#\n";
+  }
 
   return a.str();
 }
@@ -188,28 +191,29 @@ string CIFFormat::createAtomSiteLineFromAtom(Atom &_at, vector<string> &_fields,
   a << "ATOM ";
   a << atomNumber << " ";
   for (uint i = 0; i < _fields.size();i++){
-    if (_fields[i] == "_atom_site.type_symbol")             a << _at.getElement() << " ";
-    if (_fields[i] == "_atom_site.label_atom_id")	    a << _at.getName() << " ";
-    if (_fields[i] == "_atom_site.label_comp_id")	    a << _at.getResidueName() << " ";
-    if (_fields[i] == "_atom_site.label_asym_id")	    a << _at.getChainId() << " ";
-    if (_fields[i] == "_atom_site.label_seq_id")	    a << _at.getResidueNumber() << " ";
+    if (_fields[i] == "_atom_site.type_symbol")             { if (_at.getElement() == "") { a << "? "; } else { a << _at.getElement() << " ";} }
+    if (_fields[i] == "_atom_site.label_atom_id")	    { if (_at.getName() == "") { a << "? "; } else {  a << _at.getName() << " ";} }
+    if (_fields[i] == "_atom_site.label_comp_id")	    { if (_at.getResidueName() == "") { a << "? "; } else { a << _at.getResidueName() << " ";} }
+    if (_fields[i] == "_atom_site.label_asym_id")	    { if (_at.getChainId() == "") { a << "? "; } else { a << _at.getChainId() << " ";} }
+    if (_fields[i] == "_atom_site.label_seq_id")	    { a << _at.getResidueNumber() << " ";}
     if (_fields[i] == "_atom_site.pdbx_PDB_ins_code")       { if (_at.getResidueIcode() == "") { a << "? "; } else { a << _at.getResidueIcode() << " "; } }
-    if (_fields[i] == "_atom_site.Cartn_x")	            a << _at.getX() << " ";
-    if (_fields[i] == "_atom_site.Cartn_y")	            a << _at.getY() << " ";
-    if (_fields[i] == "_atom_site.Cartn_z")	            a << _at.getZ() << " ";
-    if (_fields[i] == "_atom_site.occupancy")	            a << 1.00 << " ";
-    if (_fields[i] == "_atom_site.B_iso_or_equiv")	    a << _at.getTempFactor() << " ";    
+    if (_fields[i] == "_atom_site.Cartn_x")	            { a << _at.getX() << " "; } 
+    if (_fields[i] == "_atom_site.Cartn_y")	            { a << _at.getY() << " ";} 
+    if (_fields[i] == "_atom_site.Cartn_z")	            { a << _at.getZ() << " ";}
+    if (_fields[i] == "_atom_site.occupancy")	            { a << 1.00 << " "; }
+    if (_fields[i] == "_atom_site.B_iso_or_equiv")	    { a << _at.getTempFactor() << " ";}
   }
 
   a << "\n";
+
   
   return a.str();
   
 }
 
-std::string CIFFormat::createLoopAtomSite(AtomPointerVector &_ats){
+std::string CIFFormat::createLoopAtomSite(AtomPointerVector &_ats, bool _addHeader, bool _addTail){
   std::vector<std::string> _fields;
-  return createLoopAtomSite(_ats, _fields);
+  return createLoopAtomSite(_ats, _fields, _addHeader, _addTail);
 }
 
 std::string CIFFormat::createAtomSiteLineFromAtom(Atom &_at,unsigned int _atomNumber){

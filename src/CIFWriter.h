@@ -62,7 +62,7 @@ class CIFWriter : public Writer {
 		// Get/Set
 
 		// Member Functions
-		bool write(AtomPointerVector &_av, bool _noHydrogens=false);
+		bool write(AtomPointerVector &_av, bool _noHydrogens=false, bool _addHeader=true, bool _addTail=true);
 
 		bool open();               // There is a default implementation
 		bool open(const std::string &_filename); // There is a default implementation
@@ -81,7 +81,6 @@ inline bool CIFWriter::open() {bool success = Writer::open(); return success;}
 inline bool CIFWriter::open(const std::string &_filename) {bool success = Writer::open(_filename); return success;}
 inline bool CIFWriter::open(const std::string &_filename, int mode) {bool success = Writer::open(_filename, mode); return success;}
 inline bool CIFWriter::open(std::stringstream &_ss) {fileHandler = stringstyle; bool success = Writer::open(_ss); return success;}
-inline void CIFWriter::close() { Writer::close(); }
 
 
 }

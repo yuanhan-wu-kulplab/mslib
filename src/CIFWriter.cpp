@@ -45,7 +45,7 @@ CIFWriter::~CIFWriter() {
 }
 
 
-bool CIFWriter::write(AtomPointerVector &_av, bool _noHydrogens) {
+bool CIFWriter::write(AtomPointerVector &_av, bool _noHydrogens, bool _addHeader, bool _addTail) {
 
 	/******************************************************
 	 *
@@ -58,15 +58,25 @@ bool CIFWriter::write(AtomPointerVector &_av, bool _noHydrogens) {
 
 	if( is_open() == false )
 	return false;
-	string header = "data_MSL1";
-	writeln(header);
 
-	string lines = CIFFormat::createLoopAtomSite(_av);
+	if (_addHeader){
+	  string header = "data_MSL1";
+	  writeln(header);
+	}
+
+	string lines = CIFFormat::createLoopAtomSite(_av,_addHeader,_addTail);
 	writeln(lines);
 
-	string tail="#";
-	writeln(tail);
+	if (_addTail){
+	  string foo="#";
+	  writeln(foo);
+	}
 	
 	return true;
 }
 
+
+void CIFWriter::close() {
+
+  Writer::close();
+}

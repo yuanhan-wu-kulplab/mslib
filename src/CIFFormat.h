@@ -51,8 +51,8 @@ class CIFFormat {
        public:
                 static Atom * createAtomFromAtomSiteLine(const std::string &_pdbAtomLine, std::vector<std::string> &_fields, bool _allowPartialRead=false);
 
-                static std::string createLoopAtomSite(AtomPointerVector &_ats);
-                static std::string createLoopAtomSite(AtomPointerVector &_ats, std::vector<std::string> &_fields);
+                static std::string createLoopAtomSite(AtomPointerVector &_ats, bool _addHeader=true, bool _addTail=true);
+                static std::string createLoopAtomSite(AtomPointerVector &_ats, std::vector<std::string> &_fields, bool _addHeader=true, bool _addTail=true);
 
                 static std::string createAtomSiteLineFromAtom(Atom &_at,unsigned int _atomNumber=0);
                 static std::string createAtomSiteLineFromAtom(Atom &_at, std::vector<std::string> &_fields,unsigned int _atomNumber=0);

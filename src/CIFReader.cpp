@@ -205,7 +205,7 @@ bool CIFReader::read(bool _noHydrogens, bool _allowPartialRead) {
 void CIFReader::processData(string &_category, vector<string> &_fields, string &_line){
 
   if (_category == "_atom_site"){
-    //MSLOUT.stream() << "CREATE ATOM BUDDY!:"<<_line<<endl;
+    MSLOUT.stream() << "CREATE ATOM BUDDY!:"<<_line<<endl;
     Atom *a = CIFFormat::createAtomFromAtomSiteLine(_line, _fields);
     atoms.push_back(a);
   }
