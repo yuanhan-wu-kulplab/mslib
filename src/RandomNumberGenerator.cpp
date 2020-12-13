@@ -34,7 +34,15 @@ You should have received a copy of the GNU Lesser General Public
 using namespace MSL;
 using namespace std;
 
+int RandomNumberGenerator::getRandomBit() {
+  long int a = getRandomInt(1,2);
 
+  if (a == 1){
+    return 1;
+  }
+
+  return -1;
+}
 
 RandomNumberGenerator::RandomNumberGenerator(bool includeUpperLimit){
 
@@ -95,11 +103,11 @@ void RandomNumberGenerator::setRNGType(string _type){
 
 	// MT19937: MT19937 generator of Makoto Matsumoto and Takuji Nishimura
 	//    is a variant of the twisted generalized feedback shift-register algorithm, 
-	//    and is known as the “Mersenne Twister” generator.
+	//    and is known as the “Mersenne Twister” generator.
 	if (randType == "mt19937"){ Type = gsl_rng_mt19937; }
 
 	// ranlx : second-generation version of the ranlux algorithm
-	//    of LN|scher,which produces “luxury random numbers”
+	//    of LN|scher,which produces “luxury random numbers”
 	if (randType == "ranlxs0"){ Type = gsl_rng_ranlxs0; }
 	if (randType == "ranlxs1"){ Type = gsl_rng_ranlxs1; }
 	if (randType == "ranlxs2"){ Type = gsl_rng_ranlxs2; }

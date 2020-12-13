@@ -76,6 +76,8 @@ class RandomNumberGenerator {
 		long int             getRandomInt(long int _lowerLimit, long int _upperLimit); // between _lowerLimit and _upperLimit (both included by default)
 		unsigned long int    getRandomIntLimit(int _upperLimit); // DEPRECATED
 
+		int                  getRandomBit(); // either -1 or 1
+		
 		std::vector <unsigned int> getRandomOrder (uint _size);			//returns vector between 0 and _size-1 numbered in a random order
 		std::vector <unsigned int> getRandomOrder (uint _start, uint _end);
 
